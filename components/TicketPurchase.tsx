@@ -2,30 +2,76 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Minus, ShoppingCart } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, CheckCircle, AlertCircle } from 'lucide-react';
 import { ActionButton } from './ActionButton';
 import { Modal } from './Modal';
 import { TICKET_PRICE, BULK_DISCOUNTS } from '../lib/constants';
 import { calculateBulkDiscount, formatEther } from '../lib/utils';
+import { usePaymentClient, processPayment, checkTransactionConfirmation, calculateUSDCTotal } from '../lib/payment';
+import { useAccount } from 'wagmi';
 
 export function TicketPurchase() {
   const [ticketCount, setTicketCount] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'confirming' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const { address, isConnected } = useAccount();
+  const paymentClient = usePaymentClient();
 
   const basePrice = parseFloat(TICKET_PRICE) * ticketCount;
   const discount = calculateBulkDiscount(ticketCount);
   const finalPrice = basePrice * (1 - discount);
 
   const handlePurchase = async () => {
+    if (!paymentClient || !isConnected) {
+      setErrorMessage('Please connect your wallet first');
+      return;
+    }
+
     setIsPurchasing(true);
+    setPaymentStatus('processing');
+    setErrorMessage('');
+
     try {
-      // Simulate purchase process
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIsModalOpen(false);
-      setTicketCount(1);
-    } catch (error) {
+      // Calculate USDC amount (x402 uses USDC for payments)
+      const usdcAmount = calculateUSDCTotal(ticketCount, TICKET_PRICE);
+
+      const paymentRequest = {
+        amount: usdcAmount,
+        currency: 'USDC' as const,
+        description: `Purchase ${ticketCount} lottery ticket${ticketCount > 1 ? 's' : ''} for FairPlay Draws`,
+        ticketCount
+      };
+
+      const result = await processPayment(paymentClient, paymentRequest);
+
+      if (result.success && result.txHash) {
+        setPaymentStatus('confirming');
+
+        // Check transaction confirmation
+        const isConfirmed = await checkTransactionConfirmation(result.txHash);
+
+        if (isConfirmed) {
+          setPaymentStatus('success');
+          setTimeout(() => {
+            setIsModalOpen(false);
+            setTicketCount(1);
+            setPaymentStatus('idle');
+          }, 2000);
+        } else {
+          setPaymentStatus('error');
+          setErrorMessage('Transaction confirmation failed. Please check your wallet.');
+        }
+      } else {
+        setPaymentStatus('error');
+        setErrorMessage(result.error || 'Payment failed');
+      }
+    } catch (error: any) {
       console.error('Purchase failed:', error);
+      setPaymentStatus('error');
+      setErrorMessage(error.message || 'Purchase failed');
     } finally {
       setIsPurchasing(false);
     }
@@ -106,16 +152,17 @@ export function TicketPurchase() {
             size="lg"
             onClick={() => setIsModalOpen(true)}
             className="w-full"
+            disabled={!isConnected}
           >
             <ShoppingCart className="w-5 h-5" />
-            Buy {ticketCount} Ticket{ticketCount > 1 ? 's' : ''}
+            {isConnected ? `Buy ${ticketCount} Ticket${ticketCount > 1 ? 's' : ''}` : 'Connect Wallet to Buy'}
           </ActionButton>
         </div>
       </div>
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => !isPurchasing && setIsModalOpen(false)}
         title="Confirm Purchase"
       >
         <div className="space-y-4">
@@ -142,6 +189,51 @@ export function TicketPurchase() {
             </div>
           </div>
 
+          {!isConnected && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 text-red-500" />
+                <span className="text-red-400 text-sm">Please connect your wallet to make a purchase</span>
+              </div>
+            </div>
+          )}
+
+          {paymentStatus === 'error' && errorMessage && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-4 h-4 text-red-500" />
+                <span className="text-red-400 text-sm">{errorMessage}</span>
+              </div>
+            </div>
+          )}
+
+          {paymentStatus === 'processing' && (
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-blue-400 text-sm">Processing payment...</span>
+              </div>
+            </div>
+          )}
+
+          {paymentStatus === 'confirming' && (
+            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-yellow-400 text-sm">Confirming transaction...</span>
+              </div>
+            </div>
+          )}
+
+          {paymentStatus === 'success' && (
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span className="text-green-400 text-sm">Payment successful! Tickets will be minted shortly.</span>
+              </div>
+            </div>
+          )}
+
           <p className="text-text-secondary text-sm">
             Your tickets will be minted as NFTs and sent to your wallet after purchase confirmation.
           </p>
@@ -160,8 +252,12 @@ export function TicketPurchase() {
               onClick={handlePurchase}
               loading={isPurchasing}
               className="flex-1"
+              disabled={!isConnected || paymentStatus === 'success'}
             >
-              {isPurchasing ? 'Processing...' : 'Confirm Purchase'}
+              {paymentStatus === 'processing' ? 'Processing...' :
+               paymentStatus === 'confirming' ? 'Confirming...' :
+               paymentStatus === 'success' ? 'Success!' :
+               'Confirm Purchase'}
             </ActionButton>
           </div>
         </div>

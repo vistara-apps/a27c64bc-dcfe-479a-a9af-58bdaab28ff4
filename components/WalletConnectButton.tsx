@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useMiniKit } from '@coinbase/minikit';
-import { useAuthenticate } from '@coinbase/onchainkit/minikit';
+import { useMiniKit } from '@worldcoin/minikit-react';
 import { Wallet, Loader2 } from 'lucide-react';
 import { formatAddress } from '../lib/utils';
 
