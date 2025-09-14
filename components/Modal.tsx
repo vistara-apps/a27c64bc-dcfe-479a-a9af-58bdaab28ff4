@@ -67,21 +67,21 @@ export function Modal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
             className={`
-              relative bg-surface rounded-xl shadow-modal neon-border
-              ${variant === 'fullscreen' 
-                ? 'w-full h-full max-w-none max-h-none' 
+              relative bg-bg-surface rounded-xl shadow-modal neon-border
+              ${variant === 'fullscreen'
+                ? 'w-full h-full max-w-none max-h-none'
                 : 'w-full max-w-md max-h-[90vh] overflow-y-auto'
               }
             `}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-border">
               <h2 className="text-xl font-semibold text-text-primary">
                 {title}
               </h2>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 flex items-center justify-center transition-colors duration-200"
+                className="w-8 h-8 rounded-full bg-bg-secondary hover:bg-muted flex items-center justify-center transition-colors duration-200"
               >
                 <X className="w-4 h-4 text-text-primary" />
               </button>

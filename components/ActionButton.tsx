@@ -26,7 +26,7 @@ export function ActionButton({
   
   const variantClasses = {
     primary: 'bg-primary hover:bg-primary/80 text-white glow-effect',
-    secondary: 'bg-surface hover:bg-surface/80 text-text-primary neon-border',
+    secondary: 'bg-bg-surface hover:bg-bg-surface/80 text-text-primary neon-border',
   };
 
   const sizeClasses = {

@@ -26,7 +26,7 @@ export function WalletConnectButton() {
 
   if (user?.address) {
     return (
-      <div className="flex items-center space-x-2 bg-surface px-4 py-2 rounded-lg neon-border">
+      <div className="flex items-center space-x-2 bg-bg-surface px-4 py-2 rounded-lg neon-border">
         <Wallet className="w-4 h-4 text-primary" />
         <span className="text-sm font-medium">
           {formatAddress(user.address)}

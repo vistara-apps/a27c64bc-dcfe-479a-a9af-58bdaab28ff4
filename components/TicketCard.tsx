@@ -17,7 +17,7 @@ export function TicketCard({
   className = '' 
 }: TicketCardProps) {
   const variantClasses = {
-    default: 'bg-surface border-gray-700',
+    default: 'bg-bg-surface border-border',
     active: 'bg-primary/10 border-primary neon-border',
     winner: 'bg-accent/10 border-accent glow-effect',
   };

@@ -41,7 +41,7 @@ export function TicketPurchase() {
 
   return (
     <>
-      <div className="bg-surface rounded-xl p-6 neon-border">
+      <div className="bg-bg-surface rounded-xl p-6 neon-border">
         <h3 className="text-xl font-semibold text-text-primary mb-4">
           Purchase Tickets
         </h3>
@@ -92,7 +92,7 @@ export function TicketPurchase() {
             </motion.div>
           )}
 
-          <div className="border-t border-gray-700 pt-4">
+          <div className="border-t border-border pt-4">
             <div className="flex items-center justify-between text-lg">
               <span className="text-text-primary font-semibold">Total:</span>
               <span className="text-accent font-bold">
@@ -119,7 +119,7 @@ export function TicketPurchase() {
         title="Confirm Purchase"
       >
         <div className="space-y-4">
-          <div className="bg-bg rounded-lg p-4 space-y-2">
+          <div className="bg-bg-secondary rounded-lg p-4 space-y-2">
             <div className="flex justify-between">
               <span className="text-text-secondary">Tickets:</span>
               <span className="text-text-primary">{ticketCount}</span>
@@ -134,7 +134,7 @@ export function TicketPurchase() {
                 <span>-{formatEther(basePrice - finalPrice)} ETH</span>
               </div>
             )}
-            <div className="border-t border-gray-700 pt-2">
+            <div className="border-t border-border pt-2">
               <div className="flex justify-between text-lg font-bold">
                 <span className="text-text-primary">Total:</span>
                 <span className="text-accent">{formatEther(finalPrice)} ETH</span>

@@ -11,6 +11,17 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        // Semantic color tokens for the app
+        bg: {
+          DEFAULT: "var(--bg)",
+          surface: "var(--bg-surface)",
+          secondary: "var(--bg-secondary)",
+        },
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
+        },
         // Design system color tokens
         primary: {
           DEFAULT: "var(--primary)",
