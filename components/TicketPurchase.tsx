@@ -119,7 +119,7 @@ export function TicketPurchase() {
         title="Confirm Purchase"
       >
         <div className="space-y-4">
-          <div className="bg-bg rounded-lg p-4 space-y-2">
+          <div className="rounded-lg p-4 space-y-2" style={{ backgroundColor: 'hsl(235, 20%, 15%)' }}>
             <div className="flex justify-between">
               <span className="text-text-secondary">Tickets:</span>
               <span className="text-text-primary">{ticketCount}</span>

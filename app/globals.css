@@ -8,7 +8,8 @@
   }
   
   body {
-    @apply bg-bg text-text-primary;
+    background-color: hsl(235, 20%, 15%);
+    color: hsl(0, 0%, 95%);
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
