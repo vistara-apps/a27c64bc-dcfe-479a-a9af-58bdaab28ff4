@@ -1,0 +1,14 @@
+{
+  "name": "FairPlay Draws",
+  "description": "FairPlay Draws is a Base Mini App built with Zara.",
+  "image": "https://dummyimage.com/1200x628/0a0b0d/ffffff.png&text=OG",
+  "external_url": "https://a27c64bc-dcfe-479a-a9af-58bdaab28ff4.vercel.app",
+  "properties": {
+    "app": {
+      "name": "FairPlay Draws",
+      "description": "FairPlay Draws is a Base Mini App built with Zara.",
+      "url": "https://a27c64bc-dcfe-479a-a9af-58bdaab28ff4.vercel.app",
+      "icon": "https://0co.to/images/zara-2.png"
+    }
+  }
+}

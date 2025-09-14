@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "1",
+    "name": "FairPlay Draws",
+    "subtitle": "Built with Zara",
+    "description": "FairPlay Draws is a Base Mini App built with Zara.",
+    "iconUrl": "https://0co.to/images/zara-2.png",
+    "homeUrl": "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app",
+    "splashImageUrl": "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app/splash.png",
+    "splashBackgroundColor": "#000000",
+    "heroImageUrl": "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app/image.png",
+    "tagline": "FairPlay Draws",
+    "screenshotUrls": [
+      "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app/screenshot.png",
+      "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "miniapp",
+      "onchainkit"
+    ],
+    "webhookUrl": "https://a27c64bcdcfe479aa9af58bdaab28ff4-0oxh.vercel.app/api/webhook"
+  }
+}
