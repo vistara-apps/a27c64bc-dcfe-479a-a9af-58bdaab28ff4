@@ -67,7 +67,7 @@ export function DrawInterface() {
   };
 
   return (
-    <div className="bg-surface rounded-xl p-6 neon-border holographic-bg">
+    <div className="bg-bg-surface rounded-xl p-6 neon-border holographic-bg">
       <div className="text-center space-y-4">
         <div className="flex items-center justify-between mb-6">
           <div className="text-left">
