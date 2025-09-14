@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "echo \"No tests specified\" && exit 0",
+    "prepare": "husky install",
+    "deploy:contracts": "forge script script/Deploy.s.sol --rpc-url $BASE_RPC_URL --private-key $PRIVATE_KEY --broadcast",
+    "verify:contracts": "forge verify-contract --chain-id 8453 --etherscan-api-key $ETHERSCAN_API_KEY"
   },
   "dependencies": {
     "@coinbase/minikit": "^0.1.0",

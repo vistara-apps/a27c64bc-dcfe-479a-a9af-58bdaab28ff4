@@ -7,27 +7,25 @@ import { ActionButton } from './ActionButton';
 import { Modal } from './Modal';
 import { TICKET_PRICE, BULK_DISCOUNTS } from '../lib/constants';
 import { calculateBulkDiscount, formatEther } from '../lib/utils';
+import { usePurchaseTickets } from '../lib/hooks/useLottery';
 
 export function TicketPurchase() {
   const [ticketCount, setTicketCount] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPurchasing, setIsPurchasing] = useState(false);
+  const { purchaseTickets, isPending, isConfirming, isConfirmed } = usePurchaseTickets();
 
   const basePrice = parseFloat(TICKET_PRICE) * ticketCount;
   const discount = calculateBulkDiscount(ticketCount);
   const finalPrice = basePrice * (1 - discount);
 
   const handlePurchase = async () => {
-    setIsPurchasing(true);
     try {
-      // Simulate purchase process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Use the blockchain hook to purchase tickets
+      purchaseTickets(1, ticketCount); // drawId = 1 for current draw
       setIsModalOpen(false);
       setTicketCount(1);
     } catch (error) {
       console.error('Purchase failed:', error);
-    } finally {
-      setIsPurchasing(false);
     }
   };
 
@@ -158,10 +156,13 @@ export function TicketPurchase() {
             <ActionButton
               variant="primary"
               onClick={handlePurchase}
-              loading={isPurchasing}
+              loading={isPending || isConfirming}
               className="flex-1"
+              disabled={isPending || isConfirming}
             >
-              {isPurchasing ? 'Processing...' : 'Confirm Purchase'}
+              {isPending ? 'Sending Transaction...' :
+               isConfirming ? 'Confirming...' :
+               'Confirm Purchase'}
             </ActionButton>
           </div>
         </div>
